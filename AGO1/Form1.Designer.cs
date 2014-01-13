@@ -48,11 +48,11 @@
         // 
         // orgTxt
         // 
-        this.orgTxt.Location = new System.Drawing.Point(94, 12);
+        this.orgTxt.Location = new System.Drawing.Point(95, 11);
         this.orgTxt.Name = "orgTxt";
         this.orgTxt.Size = new System.Drawing.Size(179, 20);
         this.orgTxt.TabIndex = 0;
-        this.orgTxt.Text = "epro";
+        this.orgTxt.Text = "org id";
         // 
         // userTxt
         // 
@@ -60,7 +60,7 @@
         this.userTxt.Name = "userTxt";
         this.userTxt.Size = new System.Drawing.Size(179, 20);
         this.userTxt.TabIndex = 1;
-        this.userTxt.Text = "tswanson_PhillyRO";
+        this.userTxt.Text = "username";
         // 
         // pwdTxt
         // 
@@ -69,7 +69,6 @@
         this.pwdTxt.PasswordChar = '*';
         this.pwdTxt.Size = new System.Drawing.Size(179, 20);
         this.pwdTxt.TabIndex = 2;
-        this.pwdTxt.Text = "password";
         // 
         // goBtn
         // 

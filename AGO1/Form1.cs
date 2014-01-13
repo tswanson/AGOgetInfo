@@ -41,7 +41,7 @@ namespace AGO1
       catch (Exception ex)
       {
 
-        logTxt.Text += ex.Message + "\n";
+        logTxt.Text += ex.Message + "\r\n";
         tw.Close();
       }
 
@@ -51,13 +51,13 @@ namespace AGO1
       try
       {
         string getUsersURL = GetUsersUrl(orgTxt.Text, orgToken);
-        logTxt.Text += getUsersURL + "\n";
+        logTxt.Text += getUsersURL + "\r\n";
         UsersResponse usersResponse = MakeUsersRequest(getUsersURL, logTxt);
         userList = ProcessUsersResponse(usersResponse);
       }
       catch (Exception ex)
       {
-        logTxt.Text += ex.Message + "\n";
+        logTxt.Text += ex.Message + "\r\n";
         tw.Close();
       }
       dataGridView1.DataSource = userList;
@@ -68,9 +68,12 @@ namespace AGO1
         {
           User tempUser = (User)userList[i];
           string locationsRequest = GetUserUrl(orgTxt.Text, tempUser.Username, orgToken);
-          logTxt.Text += locationsRequest + "\n";
+          logTxt.Text += locationsRequest + "\r\n";
           Response locationsResponse = MakeRequest(locationsRequest, logTxt);
           ProcessResponse(locationsResponse,"",tw);
+
+          
+
           for (int j = 0; j < locationsResponse.Folders.Length; j++)
           {
             string folderRequest = GetFolderUrl(orgTxt.Text, tempUser.Username, orgToken,locationsResponse.Folders[j].Id);
@@ -86,7 +89,7 @@ namespace AGO1
 
       }
       tw.Close();
-      logTxt.Text += "\nFinished" + "\n";
+      logTxt.Text += "\r\nFinished" + "\n";
     }
     public static string GetTokenUrl(string org, string user, string pwd)
     {
@@ -110,16 +113,17 @@ namespace AGO1
       return (UrlRequest);
     }
     public static string GetUserUrl(string org, string user, string token)
-  {
-    
-    string UrlRequest = "https://"+
-                        org+
-                        ".maps.arcgis.com/sharing/content/users/"+
-                        user+
-                        "//?f=pjson&token="+
-                        token;
-      return (UrlRequest);
-  }
+    {
+
+        string UrlRequest = "https://" +
+                            org +
+                            ".maps.arcgis.com/sharing/content/users/" +
+                            user +
+                            "//?f=pjson&token=" +
+                            token;
+        return (UrlRequest);
+    }
+
     public static string GetFolderUrl(string org, string user, string token, string folderId)
     {
 
@@ -251,6 +255,10 @@ namespace AGO1
     long numRatings = userResponse.Items[i].NumRatings;
     double avgRatings = userResponse.Items[i].AvgRating;
     long numViews = userResponse.Items[i].NumViews;
+
+    name = name.Replace(',', ' ');
+    title = title.Replace(',', ' ');
+    folder = folder.Replace(',', ' ');
 
     // write a line of text to the file
     tw.WriteLine(id + "," + item + "," + itemType + "," + owner + "," + folder + "," + uploaded + "," + modified + "," + name + "," + title + "," + type + "," +
