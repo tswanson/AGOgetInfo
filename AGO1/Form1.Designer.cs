@@ -127,9 +127,9 @@
         this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         this.label4.Location = new System.Drawing.Point(289, 124);
         this.label4.Name = "label4";
-        this.label4.Size = new System.Drawing.Size(278, 16);
+        this.label4.Size = new System.Drawing.Size(471, 16);
         this.label4.TabIndex = 8;
-        this.label4.Text = "Output written to C:\\Temp\\AGO_Org.csv";
+        this.label4.Text = "Output written to C:\\Temp\\AGO_OrgData.csv and AGO_OrgUser.csv";
         // 
         // logTxt
         // 

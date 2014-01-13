@@ -26,10 +26,12 @@ namespace AGO1
     {
       string orgToken = "";
       // create a writer and open the file
-      TextWriter tw = new StreamWriter("c:\\Temp\\AGO_Org.csv",false);
+      TextWriter tw = new StreamWriter("c:\\Temp\\AGO_OrgData.csv",false);
+      TextWriter twUser = new StreamWriter("c:\\Temp\\AGO_OrgUser.csv", false);
       // write a line of text to the file
       logTxt.ScrollBars = ScrollBars.Vertical;
       tw.WriteLine("id,item,itemType,owner,folder,uploaded,modified,name,title,type,tags,access,size,numComments,numRatings,avgRatings,numViews");
+      twUser.WriteLine("username,fullname,description,role,privacy,preferredview,email,access,accountid,created,modified,storagequota,storageusage");   
         // Get a token for the organization site.
       try
       {
@@ -53,7 +55,7 @@ namespace AGO1
         string getUsersURL = GetUsersUrl(orgTxt.Text, orgToken);
         logTxt.Text += getUsersURL + "\r\n";
         UsersResponse usersResponse = MakeUsersRequest(getUsersURL, logTxt);
-        userList = ProcessUsersResponse(usersResponse);
+        userList = ProcessUsersResponse(usersResponse,twUser);
       }
       catch (Exception ex)
       {
@@ -89,6 +91,7 @@ namespace AGO1
 
       }
       tw.Close();
+      twUser.Close();
       logTxt.Text += "\r\nFinished" + "\n";
     }
     public static string GetTokenUrl(string org, string user, string pwd)
@@ -267,6 +270,9 @@ namespace AGO1
     }
     
   }
+
+  
+
   static public string quoteString(string str)
   {
     return "\"" + str + "\"";
@@ -308,7 +314,7 @@ namespace AGO1
 
 
   }
-  static public ArrayList ProcessUsersResponse(UsersResponse usersResponse)
+  static public ArrayList ProcessUsersResponse(UsersResponse usersResponse, TextWriter twUser)
   {
     ArrayList ar = new ArrayList();
     int usersNum = usersResponse.Users.Length;
@@ -316,6 +322,27 @@ namespace AGO1
     for (int i = 0; i < usersNum; i++)
     {
       ar.Add(usersResponse.Users[i]);
+      string access = quoteString(usersResponse.Users[i].Access);
+      string accountid = quoteString(usersResponse.Users[i].AccountId);
+      string description = quoteString(usersResponse.Users[i].Description);
+      string created = UnixMillisecondsTimeStampToDateTime(usersResponse.Users[i].Created);
+      string modified = UnixMillisecondsTimeStampToDateTime(usersResponse.Users[i].Modified);
+      string email = quoteString(usersResponse.Users[i].Email);
+      string fullname = quoteString(usersResponse.Users[i].FullName);
+      string preferredview = quoteString(usersResponse.Users[i].PreferredView);
+      string privacy = quoteString(usersResponse.Users[i].Privacy);
+      string role = quoteString(usersResponse.Users[i].Role);
+      string username = quoteString(usersResponse.Users[i].Username);
+      double storagequota = byteToMB(usersResponse.Users[i].StorageQuota);
+      double storageusage = byteToMB(usersResponse.Users[i].StorageUsage);
+      
+      description = description.Replace(',', ' ');
+  
+
+
+      // write a line of text to the file
+      twUser.WriteLine(username + "," + fullname + "," + description + "," + role + "," + privacy + "," + preferredview + "," + email + "," + access + "," + accountid + "," +
+                   created + "," + modified + "," + storagequota + "," + storageusage);
     }
     
     return ar;
